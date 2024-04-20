@@ -35,63 +35,77 @@ namespace JogoGourmet.Application.Services
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                _messageBoxService.ShowMessageBox("Pense em um prato que gosta.", MessageBoxButtons.OK);
-                bool restart = false;
-
-                foreach (var dish in _dishOrganizer.GetAllDishes())
+                DialogResult msg = _messageBoxService.ShowMessageBox("Pense em um prato que gosta.", MessageBoxButtons.OKCancel);
+                if (msg == DialogResult.OK)
                 {
-                    if (cancellationToken.IsCancellationRequested) break;
+                    bool restart = false;
 
-                    bool result = false;
-                    var characteristicStrategy = _dishIdentificationStrategies
-                        .FirstOrDefault(s => s is CharacteristicDishIdentificationStrategy);
-
-                    if (characteristicStrategy != null)
+                    foreach (var dish in _dishOrganizer.GetAllDishes())
                     {
-                        result = characteristicStrategy.IdentifyDish(dish);
+                        if (cancellationToken.IsCancellationRequested) break;
 
-                        if (result)
+                        bool result = false;
+                        var characteristicStrategy = _dishIdentificationStrategies
+                            .FirstOrDefault(s => s is CharacteristicDishIdentificationStrategy);
+
+                        if (characteristicStrategy != null)
                         {
-                            if (dish.Name == dish.Characteristic)
-                            {
-                                _messageBoxService.ShowMessageBox("Acertei de novo!", MessageBoxButtons.OK);
-                                restart = true;
-                                break;
-                            }
+                            result = characteristicStrategy.IdentifyDish(dish);
 
-                            var nameStrategy = _dishIdentificationStrategies.FirstOrDefault(s => s is NameDishIdentificationStrategy);
-                            if (nameStrategy != null)
+                            if (result)
                             {
-                                result = nameStrategy.IdentifyDish(dish);
-                                if (result)
+                                if (dish.Name == dish.Characteristic)
                                 {
-                                    _messageBoxService.ShowMessageBox("Acertei de novo!", MessageBoxButtons.OK);
+                                    DialogResult msgResult = _messageBoxService.ShowMessageBox("Acertei de novo! Deseja encerrar o jogo?", MessageBoxButtons.YesNo);
+                                    if (msgResult == DialogResult.Yes)
+                                    {
+                                        Environment.Exit(0);
+                                    }
                                     restart = true;
                                     break;
                                 }
-                                else
+
+                                var nameStrategy = _dishIdentificationStrategies.FirstOrDefault(s => s is NameDishIdentificationStrategy);
+                                if (nameStrategy != null)
                                 {
-                                    NewDish();
+                                    result = nameStrategy.IdentifyDish(dish);
+                                    if (result)
+                                    {
+                                        DialogResult msgResult = _messageBoxService.ShowMessageBox("Acertei de novo! Deseja encerrar o jogo?", MessageBoxButtons.YesNo);
+                                        if (msgResult == DialogResult.Yes)
+                                        {
+                                            Environment.Exit(0);
+                                        }
+                                        restart = true;
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        NewDish();
+                                    }
                                 }
                             }
-                        }
-                        else
-                        {
-                            continue;
+                            else
+                            {
+                                continue;
+                            }
                         }
                     }
-                }
 
-                if (restart)
+                    if (restart)
+                    {
+                        continue;
+                    }
+
+                    NewDish();
+                    if (cancellationToken.IsCancellationRequested) break;
+                }
+                else
                 {
-                    continue;
+                    Environment.Exit(0);
                 }
-
-                NewDish();
-                if (cancellationToken.IsCancellationRequested) break;
             }
         }
-
 
         private void NewDish()
         {

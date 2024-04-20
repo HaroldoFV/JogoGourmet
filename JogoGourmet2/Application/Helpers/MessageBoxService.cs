@@ -10,6 +10,4 @@ namespace JogoGourmet.Application.Helpers
             return MessageBox.Show(message, "Jogo Gourmet", buttons);
         }
     }
-
-
 }
