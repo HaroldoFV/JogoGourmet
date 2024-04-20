@@ -9,7 +9,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5217A54B-04F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{ADA0AECD-95B3-448C-A060-D52056EE931E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JogoGourmet.Tests", "JogoGourmet.Tests\JogoGourmet.Tests.csproj", "{06B22389-7B71-4419-931D-29715BB8DD03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JogoGourmet.Tests", "JogoGourmet.Tests\JogoGourmet.Tests.csproj", "{06B22389-7B71-4419-931D-29715BB8DD03}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "files", "files", "{117F9BDF-6505-463F-8C93-EA8639935061}"
+	ProjectSection(SolutionItems) = preProject
+		JogoGourmet\bin\Debug\net8.0-windows\JogoGourmet.mudarextensao = JogoGourmet\bin\Debug\net8.0-windows\JogoGourmet.mudarextensao
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
